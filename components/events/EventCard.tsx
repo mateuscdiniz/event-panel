@@ -4,13 +4,15 @@ import Link from 'next/link';
 import { ArrowRight, Calendar, MapPin, Users } from 'lucide-react';
 import type { Event } from '@/types';
 import { Badge } from '@/components/ui/Badge';
-import { EVENT_STATUS_LABELS, formatDate } from '@/lib/utils';
+import { useT } from '@/hooks/useT';
+import { formatDate } from '@/lib/utils';
 
 interface EventCardProps {
   event: Event;
 }
 
 export function EventCard({ event }: EventCardProps) {
+  const { t, dateLocale } = useT();
   return (
     <Link
       href={`/events/${event.id}`}
@@ -18,13 +20,13 @@ export function EventCard({ event }: EventCardProps) {
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-semibold text-slate-900 dark:text-slate-100">{event.name}</h3>
-        <Badge variant={event.status}>{EVENT_STATUS_LABELS[event.status]}</Badge>
+        <Badge variant={event.status}>{t(`status.${event.status}`)}</Badge>
       </div>
 
       <dl className="flex flex-col gap-1.5 text-sm text-slate-600 dark:text-slate-300">
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />
-          <span>{formatDate(event.date)}</span>
+          <span>{formatDate(event.date, dateLocale)}</span>
         </div>
         <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />
@@ -34,13 +36,13 @@ export function EventCard({ event }: EventCardProps) {
           <Users className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />
           <span className="tabular-nums">
             {event.checkin_count}
-            <span className="text-slate-400 dark:text-slate-500"> / {event.expected_count} participantes</span>
+            <span className="text-slate-400 dark:text-slate-500"> / {event.expected_count} {t('common.participants')}</span>
           </span>
         </div>
       </dl>
 
       <div className="mt-auto flex items-center justify-end gap-1 border-t border-slate-100 pt-3 text-sm font-medium text-blue-600 dark:border-slate-800 dark:text-blue-400">
-        Ver detalhes
+        {t('events.seeDetails')}
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </div>
     </Link>

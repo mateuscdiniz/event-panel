@@ -13,6 +13,7 @@ import {
 import type { Checkin } from '@/types';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useThemeStore } from '@/store/themeStore';
+import { useT } from '@/hooks/useT';
 import { formatTime } from '@/lib/utils';
 
 interface CheckinChartProps {
@@ -20,7 +21,7 @@ interface CheckinChartProps {
 }
 
 // Agrupa check-ins de sucesso por minuto e acumula a contagem ao longo do tempo.
-function buildSeries(checkins: Checkin[]) {
+function buildSeries(checkins: Checkin[], dateLocale: string) {
   const successful = checkins
     .filter((c) => c.success)
     .sort(
@@ -31,19 +32,20 @@ function buildSeries(checkins: Checkin[]) {
   let cumulative = 0;
   return successful.map((c) => {
     cumulative += 1;
-    return { time: formatTime(c.timestamp), total: cumulative };
+    return { time: formatTime(c.timestamp, dateLocale), total: cumulative };
   });
 }
 
 export function CheckinChart({ checkins }: CheckinChartProps) {
-  const data = useMemo(() => buildSeries(checkins), [checkins]);
+  const { t, dateLocale } = useT();
+  const data = useMemo(() => buildSeries(checkins, dateLocale), [checkins, dateLocale]);
   const isDark = useThemeStore((s) => s.theme === 'dark');
 
   if (data.length === 0) {
     return (
       <EmptyState
-        title="Sem check-ins registrados"
-        description="Ainda não há entradas para exibir no gráfico."
+        title={t('chart.emptyTitle')}
+        description={t('chart.emptyDesc')}
       />
     );
   }
@@ -60,7 +62,7 @@ export function CheckinChart({ checkins }: CheckinChartProps) {
   return (
     <div className="h-72 w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <h3 className="mb-4 text-sm font-semibold text-slate-700 dark:text-slate-200">
-        Evolução de check-ins
+        {t('chart.title')}
       </h3>
       <ResponsiveContainer width="100%" height="85%">
         <LineChart data={data} margin={{ top: 4, right: 12, bottom: 4, left: -16 }}>
@@ -78,8 +80,8 @@ export function CheckinChart({ checkins }: CheckinChartProps) {
             axisLine={{ stroke: axisLine }}
           />
           <Tooltip
-            labelFormatter={(label) => `Horário: ${label}`}
-            formatter={(value) => [value, 'Check-ins acumulados']}
+            labelFormatter={(label) => `${t('chart.time')}: ${label}`}
+            formatter={(value) => [value, t('chart.cumulative')]}
             contentStyle={tooltipStyle}
             labelStyle={{ color: isDark ? '#e2e8f0' : undefined }}
           />

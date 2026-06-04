@@ -18,13 +18,11 @@ import { ErrorState } from '@/components/ui/ErrorState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { CheckinChart } from '@/components/dashboard/CheckinChart';
 import { ParticipantTable } from '@/components/dashboard/ParticipantTable';
-import {
-  EVENT_STATUS_LABELS,
-  formatDate,
-  formatPercent,
-} from '@/lib/utils';
+import { useT } from '@/hooks/useT';
+import { formatDate, formatPercent } from '@/lib/utils';
 
 export default function EventDashboardPage() {
+  const { t, dateLocale } = useT();
   const { id } = useParams<{ id: string }>();
   const { data: event, isLoading, isError, refetch } = useEvent(id);
 
@@ -52,7 +50,7 @@ export default function EventDashboardPage() {
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
         <BackLink />
         <ErrorState
-          message="Não foi possível carregar o evento."
+          message={t('dashboard.errorLoad')}
           onRetry={() => refetch()}
         />
       </div>
@@ -70,11 +68,11 @@ export default function EventDashboardPage() {
             {event.name}
           </h1>
           <Badge variant={event.status}>
-            {EVENT_STATUS_LABELS[event.status]}
+            {t(`status.${event.status}`)}
           </Badge>
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400">
-          <span>{formatDate(event.date)}</span>
+          <span>{formatDate(event.date, dateLocale)}</span>
           <span>·</span>
           <span>{event.location}</span>
         </div>
@@ -84,24 +82,24 @@ export default function EventDashboardPage() {
       {/* B) Métricas (4 cards) — mobile: 1 col | tablet: 2 cols | desktop: 4 cols */}
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
-          label="Participantes Esperados"
+          label={t('metrics.expected')}
           value={event.expected_count}
           icon={<Users className="h-5 w-5" />}
         />
         <MetricCard
-          label="Check-ins Realizados"
+          label={t('metrics.checkins')}
           value={event.checkin_count + localSuccess}
           icon={<CheckCircle className="h-5 w-5" />}
-          trend={localSuccess > 0 ? `+${localSuccess} locais` : undefined}
+          trend={localSuccess > 0 ? t('metrics.localTrend', { count: localSuccess }) : undefined}
         />
         <MetricCard
-          label="Tentativas com Erro"
+          label={t('metrics.errors')}
           value={event.error_count + localErrors}
           icon={<XCircle className="h-5 w-5" />}
-          trend={localErrors > 0 ? `+${localErrors} locais` : undefined}
+          trend={localErrors > 0 ? t('metrics.localTrend', { count: localErrors }) : undefined}
         />
         <MetricCard
-          label="Taxa de Entrada"
+          label={t('metrics.entryRate')}
           value={formatPercent(event.entry_rate)}
           icon={<TrendingUp className="h-5 w-5" />}
         />
@@ -109,7 +107,7 @@ export default function EventDashboardPage() {
 
       {/* C) Lista de participantes */}
       <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Participantes</h2>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{t('dashboard.participants')}</h2>
         <ParticipantTable event={event} />
       </section>
 
@@ -122,23 +120,25 @@ export default function EventDashboardPage() {
 }
 
 function BackLink() {
+  const { t } = useT();
   return (
     <Link
       href="/events"
       className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
     >
       <ArrowLeft className="h-4 w-4" />
-      Voltar para eventos
+      {t('common.backToEvents')}
     </Link>
   );
 }
 
 function DashboardSkeleton() {
+  const { t } = useT();
   return (
     <div
       className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6"
       role="status"
-      aria-label="Carregando evento"
+      aria-label={t('dashboard.loadingAria')}
     >
       <Skeleton className="h-4 w-40" />
       <Skeleton className="h-24 w-full rounded-2xl" />

@@ -14,8 +14,10 @@ import { EventCard } from '@/components/events/EventCard';
 import { EventListSkeleton } from '@/components/events/EventListSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
+import { useT } from '@/hooks/useT';
 
 export default function EventsPage() {
+  const { t } = useT();
   const { data, isLoading, isError, refetch } = useEvents();
 
   const [search, setSearch] = useState('');
@@ -42,10 +44,10 @@ export default function EventsPage() {
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-          Eventos
+          {t('events.title')}
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Gerencie eventos, métricas e check-in de participantes.
+          {t('events.subtitle')}
         </p>
       </header>
 
@@ -63,7 +65,7 @@ export default function EventsPage() {
 
       {isError && (
         <ErrorState
-          message="Não foi possível carregar os eventos."
+          message={t('events.errorLoad')}
           onRetry={() => refetch()}
         />
       )}
@@ -71,11 +73,11 @@ export default function EventsPage() {
       {!isLoading && !isError && filtered.length === 0 && (
         <EmptyState
           icon={<Calendar className="h-6 w-6" />}
-          title="Nenhum evento encontrado"
+          title={t('events.emptyTitle')}
           description={
             hasActiveFilters
-              ? 'Tente ajustar os filtros de busca.'
-              : 'Ainda não há eventos cadastrados.'
+              ? t('events.emptyFiltered')
+              : t('events.emptyNone')
           }
         />
       )}

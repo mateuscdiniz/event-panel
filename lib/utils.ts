@@ -1,15 +1,14 @@
-import type { EventStatus } from '@/types';
-
 // Junta classes condicionais, ignorando valores falsy.
 export function cn(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(' ');
 }
 
-// Formata uma data ISO para exibição em pt-BR (ex: "15 mai 2025, 09:00").
-export function formatDate(iso: string): string {
+// Formata uma data ISO para exibição (ex: "15 mai 2025, 09:00").
+// `locale` é um código BCP47 (ex: 'pt-BR', 'en-US').
+export function formatDate(iso: string, locale = 'pt-BR'): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
-  return new Intl.DateTimeFormat('pt-BR', {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -18,13 +17,6 @@ export function formatDate(iso: string): string {
   }).format(date);
 }
 
-// Rótulo em pt-BR para o status do evento.
-export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
-  active: 'Ativo',
-  closed: 'Encerrado',
-  cancelled: 'Cancelado',
-};
-
 // Formata a taxa de entrada como percentual inteiro.
 // A API entrega fração (0.92); o tipo prevê 0–100. Normaliza ambos.
 export function formatPercent(rate: number): string {
@@ -32,11 +24,11 @@ export function formatPercent(rate: number): string {
   return `${Math.round(pct)}%`;
 }
 
-// Formata apenas hora:minuto (pt-BR) — usado no eixo do gráfico.
-export function formatTime(iso: string): string {
+// Formata apenas hora:minuto — usado no eixo do gráfico.
+export function formatTime(iso: string, locale = 'pt-BR'): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
-  return new Intl.DateTimeFormat('pt-BR', {
+  return new Intl.DateTimeFormat(locale, {
     hour: '2-digit',
     minute: '2-digit',
   }).format(date);

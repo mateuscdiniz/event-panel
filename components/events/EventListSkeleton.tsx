@@ -1,15 +1,19 @@
 // Exemplo de uso:
 //   {isLoading && <EventListSkeleton />}
 
+'use client';
+
 import { Skeleton } from '@/components/ui/Skeleton';
+import { useT } from '@/hooks/useT';
 
 const CARDS = 6;
 
 export function EventListSkeleton() {
+  const { t } = useT();
   return (
     <div
       role="status"
-      aria-label="Carregando eventos"
+      aria-label={t('events.loadingAria')}
       className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
     >
       {Array.from({ length: CARDS }).map((_, i) => (
@@ -26,7 +30,7 @@ export function EventListSkeleton() {
           <Skeleton className="h-4 w-28" />
         </div>
       ))}
-      <span className="sr-only">Carregando eventos…</span>
+      <span className="sr-only">{t('events.loadingAria')}</span>
     </div>
   );
 }

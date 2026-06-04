@@ -6,6 +6,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Footer } from "@/components/ui/Footer";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LanguageSelect } from "@/components/ui/LanguageSelect";
+import { LocaleInitializer } from "@/components/ui/LocaleInitializer";
 
 // Aplica o tema salvo (ou preferência do SO) antes da hidratação — evita "flash".
 const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`;
@@ -37,6 +39,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full bg-slate-50 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <Providers>
+          <LocaleInitializer />
           <div className="flex min-h-screen flex-col">
             <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/80 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/80">
               <div className="mx-auto flex h-14 w-full max-w-6xl items-center px-4 sm:px-6">
@@ -49,7 +52,8 @@ export default function RootLayout({
                   </span>
                   EventPanel
                 </Link>
-                <div className="ml-auto">
+                <div className="ml-auto flex items-center gap-2">
+                  <LanguageSelect />
                   <ThemeToggle />
                 </div>
               </div>

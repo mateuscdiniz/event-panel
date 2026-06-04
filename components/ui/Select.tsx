@@ -9,13 +9,14 @@
 
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface SelectOption {
   value: string;
   label: string;
+  icon?: ReactNode;
 }
 
 interface SelectProps {
@@ -114,7 +115,8 @@ export function Select({
         onKeyDown={handleKeyDown}
         className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-2.5 text-sm text-slate-700 transition-colors hover:border-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600"
       >
-        <span className={cn('truncate', !selected && 'text-slate-400')}>
+        <span className={cn('flex items-center gap-2 truncate', !selected && 'text-slate-400')}>
+          {selected?.icon}
           {selected ? selected.label : placeholder}
         </span>
         <ChevronDown
@@ -152,7 +154,10 @@ export function Select({
                   isSelected && 'font-medium'
                 )}
               >
-                {opt.label}
+                <span className="flex items-center gap-2">
+                  {opt.icon}
+                  {opt.label}
+                </span>
                 {isSelected && <Check className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />}
               </button>
             );

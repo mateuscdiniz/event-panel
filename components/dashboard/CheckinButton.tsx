@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import type { Checkin, EventDetail, Participant } from '@/types';
 import { useCheckinStore } from '@/store/checkinStore';
 import { deriveStatus, validateCheckin } from '@/lib/checkin';
+import { useT } from '@/hooks/useT';
 import { cn } from '@/lib/utils';
 
 interface CheckinButtonProps {
@@ -21,6 +22,7 @@ const DISABLED =
   'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-slate-800 dark:text-slate-500';
 
 export function CheckinButton({ participant, event }: CheckinButtonProps) {
+  const { t } = useT();
   const allCheckins = useCheckinStore((s) => s.checkins);
   const addCheckin = useCheckinStore((s) => s.addCheckin);
 
@@ -36,10 +38,10 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
       <button
         type="button"
         disabled
-        title="Evento encerrado — check-ins desabilitados"
+        title={t('checkin.blockedTitle')}
         className={cn(BASE, DISABLED)}
       >
-        Check-in bloqueado
+        {t('checkin.blocked')}
       </button>
     );
   }
@@ -48,7 +50,7 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
   if (!result.success && result.error === 'already_checked_in') {
     return (
       <button type="button" disabled className={cn(BASE, DISABLED)}>
-        Já fez check-in
+        {t('checkin.already')}
       </button>
     );
   }
@@ -65,16 +67,16 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
 
   // result.success === true a partir daqui.
   const action = result.success ? result.action : 'entry';
-  const label = action === 'entry' ? 'Fazer Check-in' : 'Registrar Saída';
+  const label = action === 'entry' ? t('checkin.do') : t('checkin.exit');
 
   const handleClick = () => {
     const check = validateCheckin(participant, event, allCheckins);
 
     if (!check.success) {
       if (check.error === 'already_checked_in') {
-        toast.error(`${participant.name} já realizou o check-in`);
+        toast.error(t('toast.already', { name: participant.name }));
       } else {
-        toast.warning('Evento encerrado — check-ins desabilitados');
+        toast.warning(t('toast.closed'));
       }
       return;
     }
@@ -91,11 +93,11 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
     addCheckin(checkin);
 
     if (check.action === 'exit') {
-      toast.success(`Saída registrada para ${participant.name}`);
+      toast.success(t('toast.exit', { name: participant.name }));
     } else if (participant.type === 'vip') {
-      toast.success(`Entrada registrada para ${participant.name}`);
+      toast.success(t('toast.vipEntry', { name: participant.name }));
     } else {
-      toast.success(`Check-in realizado para ${participant.name}`);
+      toast.success(t('toast.normalEntry', { name: participant.name }));
     }
   };
 

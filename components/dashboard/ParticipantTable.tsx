@@ -15,6 +15,7 @@ import { deriveStatus } from '@/lib/checkin';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Select } from '@/components/ui/Select';
+import { useT } from '@/hooks/useT';
 import { CheckinButton } from './CheckinButton';
 
 interface ParticipantTableProps {
@@ -30,17 +31,8 @@ interface RankedParticipant {
   status: ParticipantStatus;
 }
 
-const TYPE_LABELS = { vip: 'VIP', normal: 'Normal' } as const;
-const STATUS_LABELS: Record<ParticipantStatus, string> = {
-  inside: 'Dentro',
-  outside: 'Fora',
-};
 const PAGE_SIZES: PageSize[] = [5, 10, 20];
-const SORT_LABELS: Record<SortKey, string> = {
-  name: 'Nome',
-  type: 'Tipo',
-  status: 'Status',
-};
+const SORT_KEYS: SortKey[] = ['name', 'type', 'status'];
 
 function compareRows(a: RankedParticipant, b: RankedParticipant, key: SortKey): number {
   if (key === 'type') return a.participant.type.localeCompare(b.participant.type);
@@ -49,6 +41,7 @@ function compareRows(a: RankedParticipant, b: RankedParticipant, key: SortKey): 
 }
 
 export function ParticipantTable({ event }: ParticipantTableProps) {
+  const { t } = useT();
   const checkins = useCheckinStore((s) => s.checkins);
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
@@ -94,8 +87,8 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
     return (
       <EmptyState
         icon={<Users className="h-6 w-6" />}
-        title="Nenhum participante"
-        description="Este evento não possui participantes cadastrados."
+        title={t('table.emptyTitle')}
+        description={t('table.emptyDesc')}
       />
     );
   }
@@ -104,24 +97,24 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
     <div className="flex flex-col gap-3">
       {/* Mobile: controle de ordenação (no desktop usa-se o cabeçalho) */}
       <div className="flex items-center gap-2 md:hidden">
-        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Ordenar:</span>
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{t('table.sortLabel')}</span>
         <Select
-          aria-label="Ordenar participantes por"
+          aria-label={t('table.sortAria')}
           value={sortKey}
           onChange={(v) => {
             setSortKey(v as SortKey);
             setPage(0);
           }}
-          options={(Object.keys(SORT_LABELS) as SortKey[]).map((k) => ({
+          options={SORT_KEYS.map((k) => ({
             value: k,
-            label: SORT_LABELS[k],
+            label: t(`table.${k}`),
           }))}
           className="w-36"
         />
         <button
           type="button"
           onClick={() => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
-          aria-label={sortDir === 'asc' ? 'Ordem crescente' : 'Ordem decrescente'}
+          aria-label={sortDir === 'asc' ? t('table.ascAria') : t('table.descAria')}
           className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
         >
           {sortDir === 'asc' ? (
@@ -146,15 +139,15 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
             <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
               <tr>
                 <SortableHeader columnKey="name" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
-                  Nome
+                  {t('table.name')}
                 </SortableHeader>
                 <SortableHeader columnKey="type" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
-                  Tipo
+                  {t('table.type')}
                 </SortableHeader>
                 <SortableHeader columnKey="status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
-                  Status
+                  {t('table.status')}
                 </SortableHeader>
-                <th className="px-4 py-3 text-right">Ação</th>
+                <th className="px-4 py-3 text-right">{t('table.action')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -221,12 +214,13 @@ function PaginationControls({
   onPrev,
   onNext,
 }: PaginationControlsProps) {
+  const { t } = useT();
   return (
     <div className="flex flex-col items-center justify-between gap-3 text-sm text-slate-500 dark:text-slate-400 sm:flex-row">
       <div className="flex items-center gap-2">
-        <span>Por página:</span>
+        <span>{t('table.perPage')}</span>
         <Select
-          aria-label="Itens por página"
+          aria-label={t('table.perPageAria')}
           value={String(pageSize)}
           onChange={(v) => onPageSizeChange(Number(v) as PageSize)}
           options={PAGE_SIZES.map((size) => ({
@@ -239,14 +233,18 @@ function PaginationControls({
 
       <div className="flex items-center gap-3">
         <span className="tabular-nums">
-          {start + 1}–{Math.min(start + pageSize, total)} de {total}
+          {t('table.range', {
+            start: start + 1,
+            end: Math.min(start + pageSize, total),
+            total,
+          })}
         </span>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={onPrev}
             disabled={currentPage === 0}
-            aria-label="Página anterior"
+            aria-label={t('table.prevAria')}
             className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -258,7 +256,7 @@ function PaginationControls({
             type="button"
             onClick={onNext}
             disabled={currentPage >= totalPages - 1}
-            aria-label="Próxima página"
+            aria-label={t('table.nextAria')}
             className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             <ChevronRight className="h-4 w-4" />
@@ -311,6 +309,7 @@ function SortableHeader({
 }
 
 function ParticipantRow({ row, event }: { row: RankedParticipant; event: EventDetail }) {
+  const { t } = useT();
   const { participant, status } = row;
   return (
     <tr className="h-14 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
@@ -318,10 +317,10 @@ function ParticipantRow({ row, event }: { row: RankedParticipant; event: EventDe
         {participant.name}
       </td>
       <td className="px-4 py-3">
-        <Badge variant={participant.type}>{TYPE_LABELS[participant.type]}</Badge>
+        <Badge variant={participant.type}>{t(`type.${participant.type}`)}</Badge>
       </td>
       <td className="px-4 py-3">
-        <Badge variant={status}>{STATUS_LABELS[status]}</Badge>
+        <Badge variant={status}>{t(`pstatus.${status}`)}</Badge>
       </td>
       <td className="px-4 py-3 text-right">
         <CheckinButton participant={participant} event={event} />
@@ -337,14 +336,15 @@ function ParticipantMobileCard({
   row: RankedParticipant;
   event: EventDetail;
 }) {
+  const { t } = useT();
   const { participant, status } = row;
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-start justify-between gap-2">
         <span className="font-medium text-slate-900 dark:text-slate-100">{participant.name}</span>
         <div className="flex gap-1.5">
-          <Badge variant={participant.type}>{TYPE_LABELS[participant.type]}</Badge>
-          <Badge variant={status}>{STATUS_LABELS[status]}</Badge>
+          <Badge variant={participant.type}>{t(`type.${participant.type}`)}</Badge>
+          <Badge variant={status}>{t(`pstatus.${status}`)}</Badge>
         </div>
       </div>
       <CheckinButton participant={participant} event={event} />

@@ -1,9 +1,13 @@
 // Rodapé global da aplicação (renderizado no root layout).
 // Exemplo de uso: <Footer />
 
+'use client';
+
 import { CalendarCheck2 } from 'lucide-react';
+import { useT } from '@/hooks/useT';
 
 export function Footer() {
+  const { t } = useT();
   const year = new Date().getFullYear();
 
   return (
@@ -15,7 +19,7 @@ export function Footer() {
           <span className="text-slate-400 dark:text-slate-500">© {year}</span>
         </span>
         <span className="text-center sm:text-right">
-          Painel de gestão de eventos
+          {t('footer.tagline')}
         </span>
       </div>
     </footer>
