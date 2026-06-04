@@ -47,8 +47,8 @@ export function CheckinChart({ checkins }: CheckinChartProps) {
   }
 
   return (
-    <div className="h-72 w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <h3 className="mb-4 text-sm font-semibold text-gray-700">
+    <div className="h-72 w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 className="mb-4 text-sm font-semibold text-slate-700">
         Evolução de check-ins
       </h3>
       <ResponsiveContainer width="100%" height="85%">

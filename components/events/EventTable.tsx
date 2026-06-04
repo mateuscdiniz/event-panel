@@ -14,9 +14,9 @@ export function EventTable({ events }: EventTableProps) {
   const router = useRouter();
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
-      <table className="min-w-full divide-y divide-gray-200 text-sm">
-        <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+      <table className="min-w-full divide-y divide-slate-200 text-sm">
+        <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
           <tr>
             <th className="px-4 py-3">Nome</th>
             <th className="px-4 py-3">Data</th>
@@ -26,27 +26,27 @@ export function EventTable({ events }: EventTableProps) {
             <th className="px-4 py-3 text-right">Ação</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-slate-100">
           {events.map((event) => (
             <tr
               key={event.id}
               onClick={() => router.push(`/events/${event.id}`)}
-              className="cursor-pointer transition-colors hover:bg-blue-50/50"
+              className="group cursor-pointer transition-colors hover:bg-blue-50/60"
             >
-              <td className="px-4 py-3 font-medium text-gray-900">{event.name}</td>
-              <td className="px-4 py-3 text-gray-600">{formatDate(event.date)}</td>
-              <td className="px-4 py-3 text-gray-600">{event.location}</td>
-              <td className="px-4 py-3">
+              <td className="px-4 py-3.5 font-medium text-slate-900">{event.name}</td>
+              <td className="px-4 py-3.5 text-slate-600">{formatDate(event.date)}</td>
+              <td className="px-4 py-3.5 text-slate-600">{event.location}</td>
+              <td className="px-4 py-3.5">
                 <Badge variant={event.status}>
                   {EVENT_STATUS_LABELS[event.status]}
                 </Badge>
               </td>
-              <td className="px-4 py-3 text-gray-600">
+              <td className="px-4 py-3.5 text-slate-600 tabular-nums">
                 {event.checkin_count}
-                <span className="text-gray-400"> / {event.expected_count}</span>
+                <span className="text-slate-400"> / {event.expected_count}</span>
               </td>
-              <td className="px-4 py-3 text-right">
-                <span className="inline-flex items-center gap-1 font-medium text-blue-600">
+              <td className="px-4 py-3.5 text-right">
+                <span className="inline-flex items-center gap-1 font-medium text-blue-600 transition-transform group-hover:translate-x-0.5">
                   Ver dashboard
                   <ChevronRight className="h-4 w-4" />
                 </span>

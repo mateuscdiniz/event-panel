@@ -15,6 +15,7 @@ import { useCheckinStore } from '@/store/checkinStore';
 import { MetricCard } from '@/components/ui/MetricCard';
 import { Badge } from '@/components/ui/Badge';
 import { ErrorState } from '@/components/ui/ErrorState';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { CheckinChart } from '@/components/dashboard/CheckinChart';
 import { ParticipantTable } from '@/components/dashboard/ParticipantTable';
 import {
@@ -63,21 +64,21 @@ export default function EventDashboardPage() {
       <BackLink />
 
       {/* A) Header do evento */}
-      <header className="flex flex-col gap-3">
+      <header className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
             {event.name}
           </h1>
           <Badge variant={event.status}>
             {EVENT_STATUS_LABELS[event.status]}
           </Badge>
         </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
           <span>{formatDate(event.date)}</span>
           <span>·</span>
           <span>{event.location}</span>
         </div>
-        <p className="max-w-3xl text-sm text-gray-600">{event.description}</p>
+        <p className="max-w-3xl text-sm text-slate-600">{event.description}</p>
       </header>
 
       {/* B) Métricas (4 cards) — mobile: 1 col | tablet: 2 cols | desktop: 4 cols */}
@@ -113,7 +114,7 @@ export default function EventDashboardPage() {
 
       {/* D) Lista de participantes */}
       <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold text-gray-900">Participantes</h2>
+        <h2 className="text-lg font-semibold text-slate-900">Participantes</h2>
         <ParticipantTable event={event} />
       </section>
     </div>
@@ -124,7 +125,7 @@ function BackLink() {
   return (
     <Link
       href="/events"
-      className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-blue-600"
+      className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-blue-600"
     >
       <ArrowLeft className="h-4 w-4" />
       Voltar para eventos
@@ -134,15 +135,19 @@ function BackLink() {
 
 function DashboardSkeleton() {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6">
-      <div className="h-4 w-40 animate-pulse rounded bg-gray-100" />
-      <div className="h-8 w-64 animate-pulse rounded bg-gray-100" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div
+      className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6"
+      role="status"
+      aria-label="Carregando evento"
+    >
+      <Skeleton className="h-4 w-40" />
+      <Skeleton className="h-24 w-full rounded-2xl" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-28 animate-pulse rounded-xl bg-gray-100" />
+          <Skeleton key={i} className="h-28 rounded-2xl" />
         ))}
       </div>
-      <div className="h-72 animate-pulse rounded-xl bg-gray-100" />
+      <Skeleton className="h-72 rounded-2xl" />
     </div>
   );
 }

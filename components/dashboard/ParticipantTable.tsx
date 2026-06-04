@@ -35,8 +35,8 @@ function ParticipantRow({
   const status = useLiveStatus(participant);
 
   return (
-    <tr className="hover:bg-gray-50">
-      <td className="px-4 py-3 font-medium text-gray-900">{participant.name}</td>
+    <tr className="transition-colors hover:bg-slate-50">
+      <td className="px-4 py-3 font-medium text-slate-900">{participant.name}</td>
       <td className="px-4 py-3">
         <Badge variant={participant.type}>{TYPE_LABELS[participant.type]}</Badge>
       </td>
@@ -60,9 +60,9 @@ function ParticipantMobileCard({
   const status = useLiveStatus(participant);
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-2">
-        <span className="font-medium text-gray-900">{participant.name}</span>
+        <span className="font-medium text-slate-900">{participant.name}</span>
         <div className="flex gap-1.5">
           <Badge variant={participant.type}>{TYPE_LABELS[participant.type]}</Badge>
           <Badge variant={status}>{STATUS_LABELS[status]}</Badge>
@@ -89,9 +89,9 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
   return (
     <>
       {/* Desktop / tablet: tabela */}
-      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm md:block">
-        <table className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+      <div className="hidden overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm md:block">
+        <table className="min-w-full divide-y divide-slate-200 text-sm">
+          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
             <tr>
               <th className="px-4 py-3">Nome</th>
               <th className="px-4 py-3">Tipo</th>
@@ -99,7 +99,7 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
               <th className="px-4 py-3 text-right">Ação</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-100">
             {participants.map((p) => (
               <ParticipantRow key={p.id} participant={p} event={event} />
             ))}

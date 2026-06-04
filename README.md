@@ -38,7 +38,6 @@ Painel para gestão de eventos com **listagem**, **dashboard de métricas** e **
 | Ícones | lucide-react |
 | Testes | Vitest + React Testing Library |
 
-> **Nota de versão:** o `SPECS.md` e o `CLAUDE.md` foram escritos prevendo **Next.js 14**, mas o projeto roda em **Next.js 16.2.7** (com React 19). As convenções do App Router foram seguidas conforme a documentação local instalada (`node_modules/next/dist/docs/`). Veja [Decisões Técnicas](#-decisões-técnicas).
 
 ---
 

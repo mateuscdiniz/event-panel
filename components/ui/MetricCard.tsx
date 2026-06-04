@@ -19,22 +19,22 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        'flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-5 shadow-sm',
+        'flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md',
         className
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-500">{label}</span>
+        <span className="text-sm font-medium text-slate-500">{label}</span>
         {icon && (
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-100">
             {icon}
           </span>
         )}
       </div>
-      <span className="text-3xl font-semibold tracking-tight text-gray-900">
+      <span className="text-3xl font-semibold tracking-tight text-slate-900 tabular-nums">
         {value}
       </span>
-      {trend && <span className="text-xs text-gray-400">{trend}</span>}
+      {trend && <span className="text-xs font-medium text-emerald-600">{trend}</span>}
     </div>
   );
 }
