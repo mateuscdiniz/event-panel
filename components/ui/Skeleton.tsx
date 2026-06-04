@@ -12,7 +12,7 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       aria-hidden
-      className={cn('animate-pulse rounded-md bg-slate-200/70', className)}
+      className={cn('animate-pulse rounded-md bg-slate-200/70 dark:bg-slate-700/50', className)}
     />
   );
 }

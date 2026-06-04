@@ -16,14 +16,14 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        'flex flex-col items-center justify-center gap-3 rounded-xl border border-red-200 bg-red-50/60 px-6 py-12 text-center',
+        'flex flex-col items-center justify-center gap-3 rounded-xl border border-red-200 bg-red-50/60 px-6 py-12 text-center dark:border-red-500/30 dark:bg-red-500/10',
         className
       )}
     >
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400">
         <AlertCircle className="h-6 w-6" />
       </span>
-      <p className="max-w-sm text-sm font-medium text-red-700">{message}</p>
+      <p className="max-w-sm text-sm font-medium text-red-700 dark:text-red-300">{message}</p>
       {onRetry && (
         <button
           type="button"

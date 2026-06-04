@@ -34,7 +34,7 @@ export function EventFilters({
   return (
     <div className="flex gap-3">
       <div className="flex flex-1 flex-col gap-1 sm:flex-initial">
-        <span className="text-xs font-medium text-slate-500">Status</span>
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Status</span>
         <Select
           aria-label="Filtrar por status"
           value={status}
@@ -45,7 +45,7 @@ export function EventFilters({
       </div>
 
       <div className="flex flex-1 flex-col gap-1 sm:flex-initial">
-        <span className="text-xs font-medium text-slate-500">Ordenar por data</span>
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Ordenar por data</span>
         <Select
           aria-label="Ordenar por data"
           value={sort}

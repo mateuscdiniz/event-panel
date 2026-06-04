@@ -104,7 +104,7 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
     <div className="flex flex-col gap-3">
       {/* Mobile: controle de ordenação (no desktop usa-se o cabeçalho) */}
       <div className="flex items-center gap-2 md:hidden">
-        <span className="text-xs font-medium text-slate-500">Ordenar:</span>
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Ordenar:</span>
         <Select
           aria-label="Ordenar participantes por"
           value={sortKey}
@@ -122,7 +122,7 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
           type="button"
           onClick={() => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
           aria-label={sortDir === 'asc' ? 'Ordem crescente' : 'Ordem decrescente'}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50"
+          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
         >
           {sortDir === 'asc' ? (
             <ChevronUp className="h-4 w-4" />
@@ -133,9 +133,9 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
       </div>
 
       {/* Desktop / tablet: tabela com cabeçalho ordenável + paginação no rodapé do card */}
-      <div className="hidden rounded-xl border border-slate-200 bg-white shadow-sm md:block">
+      <div className="hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 md:block">
         <div className="overflow-x-auto rounded-t-xl">
-          <table className="w-full min-w-[640px] table-fixed divide-y divide-slate-200 text-sm">
+          <table className="w-full min-w-[640px] table-fixed divide-y divide-slate-200 text-sm dark:divide-slate-800">
             {/* Larguras fixas por coluna → não "sambam" ao paginar */}
             <colgroup>
               <col />
@@ -143,7 +143,7 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
               <col className="w-32" />
               <col className="w-48" />
             </colgroup>
-            <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
               <tr>
                 <SortableHeader columnKey="name" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
                   Nome
@@ -157,14 +157,14 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
                 <th className="px-4 py-3 text-right">Ação</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {visible.map((row) => (
                 <ParticipantRow key={row.participant.id} row={row} event={event} />
               ))}
             </tbody>
           </table>
         </div>
-        <div className="border-t border-slate-200 px-4 py-3">
+        <div className="border-t border-slate-200 px-4 py-3 dark:border-slate-800">
           <PaginationControls
             pageSize={pageSize}
             onPageSizeChange={handlePageSizeChange}
@@ -183,7 +183,7 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
         {visible.map((row) => (
           <ParticipantMobileCard key={row.participant.id} row={row} event={event} />
         ))}
-        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900">
           <PaginationControls
             pageSize={pageSize}
             onPageSizeChange={handlePageSizeChange}
@@ -222,7 +222,7 @@ function PaginationControls({
   onNext,
 }: PaginationControlsProps) {
   return (
-    <div className="flex flex-col items-center justify-between gap-3 text-sm text-slate-500 sm:flex-row">
+    <div className="flex flex-col items-center justify-between gap-3 text-sm text-slate-500 dark:text-slate-400 sm:flex-row">
       <div className="flex items-center gap-2">
         <span>Por página:</span>
         <Select
@@ -247,11 +247,11 @@ function PaginationControls({
             onClick={onPrev}
             disabled={currentPage === 0}
             aria-label="Página anterior"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="px-1 tabular-nums text-slate-600">
+          <span className="px-1 tabular-nums text-slate-600 dark:text-slate-300">
             {currentPage + 1} / {totalPages}
           </span>
           <button
@@ -259,7 +259,7 @@ function PaginationControls({
             onClick={onNext}
             disabled={currentPage >= totalPages - 1}
             aria-label="Próxima página"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -293,7 +293,7 @@ function SortableHeader({
       <button
         type="button"
         onClick={() => onSort(columnKey)}
-        className="inline-flex items-center gap-1 uppercase tracking-wide transition-colors hover:text-slate-700"
+        className="inline-flex cursor-pointer items-center gap-1 uppercase tracking-wide transition-colors hover:text-slate-700 dark:hover:text-slate-200"
       >
         {children}
         {active ? (
@@ -313,8 +313,8 @@ function SortableHeader({
 function ParticipantRow({ row, event }: { row: RankedParticipant; event: EventDetail }) {
   const { participant, status } = row;
   return (
-    <tr className="h-14 transition-colors hover:bg-slate-50">
-      <td className="truncate px-4 py-3 font-medium text-slate-900" title={participant.name}>
+    <tr className="h-14 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+      <td className="truncate px-4 py-3 font-medium text-slate-900 dark:text-slate-100" title={participant.name}>
         {participant.name}
       </td>
       <td className="px-4 py-3">
@@ -339,9 +339,9 @@ function ParticipantMobileCard({
 }) {
   const { participant, status } = row;
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-start justify-between gap-2">
-        <span className="font-medium text-slate-900">{participant.name}</span>
+        <span className="font-medium text-slate-900 dark:text-slate-100">{participant.name}</span>
         <div className="flex gap-1.5">
           <Badge variant={participant.type}>{TYPE_LABELS[participant.type]}</Badge>
           <Badge variant={status}>{STATUS_LABELS[status]}</Badge>

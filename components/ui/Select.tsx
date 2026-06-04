@@ -112,7 +112,7 @@ export function Select({
         aria-label={ariaLabel}
         onClick={() => (open ? setOpen(false) : openMenu())}
         onKeyDown={handleKeyDown}
-        className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-2.5 text-sm text-slate-700 transition-colors hover:border-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+        className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-2.5 text-sm text-slate-700 transition-colors hover:border-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600"
       >
         <span className={cn('truncate', !selected && 'text-slate-400')}>
           {selected ? selected.label : placeholder}
@@ -129,7 +129,7 @@ export function Select({
         <div
           role="listbox"
           className={cn(
-            'absolute left-0 z-30 max-h-60 min-w-full overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg ring-1 ring-black/5',
+            'absolute left-0 z-30 max-h-60 min-w-full overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg ring-1 ring-black/5 dark:border-slate-700 dark:bg-slate-800 dark:ring-white/10',
             placement === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'
           )}
         >
@@ -146,12 +146,14 @@ export function Select({
                 onMouseEnter={() => setHighlight(index)}
                 className={cn(
                   'flex w-full cursor-pointer items-center justify-between gap-4 whitespace-nowrap rounded-md px-2.5 py-1.5 text-left text-sm transition-colors',
-                  isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-700',
+                  isActive
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300'
+                    : 'text-slate-700 dark:text-slate-200',
                   isSelected && 'font-medium'
                 )}
               >
                 {opt.label}
-                {isSelected && <Check className="h-4 w-4 shrink-0 text-blue-600" />}
+                {isSelected && <Check className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />}
               </button>
             );
           })}

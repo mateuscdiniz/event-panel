@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import type { Checkin } from '@/types';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { useThemeStore } from '@/store/themeStore';
 import { formatTime } from '@/lib/utils';
 
 interface CheckinChartProps {
@@ -36,6 +37,7 @@ function buildSeries(checkins: Checkin[]) {
 
 export function CheckinChart({ checkins }: CheckinChartProps) {
   const data = useMemo(() => buildSeries(checkins), [checkins]);
+  const isDark = useThemeStore((s) => s.theme === 'dark');
 
   if (data.length === 0) {
     return (
@@ -46,37 +48,47 @@ export function CheckinChart({ checkins }: CheckinChartProps) {
     );
   }
 
+  // Cores do gráfico adaptadas ao tema (Recharts usa props inline, não CSS).
+  const grid = isDark ? '#1e293b' : '#f1f5f9';
+  const axisTick = isDark ? '#94a3b8' : '#6b7280';
+  const axisLine = isDark ? '#334155' : '#e5e7eb';
+  const line = isDark ? '#3b82f6' : '#2563eb';
+  const tooltipStyle = isDark
+    ? { fontSize: 12, borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#e2e8f0' }
+    : { fontSize: 12, borderRadius: 8 };
+
   return (
-    <div className="h-72 w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h3 className="mb-4 text-sm font-semibold text-slate-700">
+    <div className="h-72 w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <h3 className="mb-4 text-sm font-semibold text-slate-700 dark:text-slate-200">
         Evolução de check-ins
       </h3>
       <ResponsiveContainer width="100%" height="85%">
         <LineChart data={data} margin={{ top: 4, right: 12, bottom: 4, left: -16 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+          <CartesianGrid strokeDasharray="3 3" stroke={grid} />
           <XAxis
             dataKey="time"
-            tick={{ fontSize: 12, fill: '#6b7280' }}
+            tick={{ fontSize: 12, fill: axisTick }}
             tickLine={false}
-            axisLine={{ stroke: '#e5e7eb' }}
+            axisLine={{ stroke: axisLine }}
           />
           <YAxis
             allowDecimals={false}
-            tick={{ fontSize: 12, fill: '#6b7280' }}
+            tick={{ fontSize: 12, fill: axisTick }}
             tickLine={false}
-            axisLine={{ stroke: '#e5e7eb' }}
+            axisLine={{ stroke: axisLine }}
           />
           <Tooltip
             labelFormatter={(label) => `Horário: ${label}`}
             formatter={(value) => [value, 'Check-ins acumulados']}
-            contentStyle={{ fontSize: 12, borderRadius: 8 }}
+            contentStyle={tooltipStyle}
+            labelStyle={{ color: isDark ? '#e2e8f0' : undefined }}
           />
           <Line
             type="monotone"
             dataKey="total"
-            stroke="#2563eb"
+            stroke={line}
             strokeWidth={2}
-            dot={{ r: 3, fill: '#2563eb' }}
+            dot={{ r: 3, fill: line }}
             activeDot={{ r: 5 }}
           />
         </LineChart>

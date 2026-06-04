@@ -64,21 +64,21 @@ export default function EventDashboardPage() {
       <BackLink />
 
       {/* A) Header do evento */}
-      <header className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <header className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             {event.name}
           </h1>
           <Badge variant={event.status}>
             {EVENT_STATUS_LABELS[event.status]}
           </Badge>
         </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400">
           <span>{formatDate(event.date)}</span>
           <span>·</span>
           <span>{event.location}</span>
         </div>
-        <p className="max-w-3xl text-sm text-slate-600">{event.description}</p>
+        <p className="max-w-3xl text-sm text-slate-600 dark:text-slate-300">{event.description}</p>
       </header>
 
       {/* B) Métricas (4 cards) — mobile: 1 col | tablet: 2 cols | desktop: 4 cols */}
@@ -109,7 +109,7 @@ export default function EventDashboardPage() {
 
       {/* C) Lista de participantes */}
       <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold text-slate-900">Participantes</h2>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Participantes</h2>
         <ParticipantTable event={event} />
       </section>
 
@@ -125,7 +125,7 @@ function BackLink() {
   return (
     <Link
       href="/events"
-      className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-blue-600"
+      className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
     >
       <ArrowLeft className="h-4 w-4" />
       Voltar para eventos

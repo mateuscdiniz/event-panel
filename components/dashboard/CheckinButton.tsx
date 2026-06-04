@@ -17,7 +17,8 @@ const BASE =
   'inline-flex h-8 w-full items-center justify-center rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 md:w-auto';
 const ENABLED =
   'cursor-pointer bg-blue-600 text-white hover:bg-blue-700 focus-visible:outline-blue-600';
-const DISABLED = 'cursor-not-allowed bg-gray-100 text-gray-400';
+const DISABLED =
+  'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-slate-800 dark:text-slate-500';
 
 export function CheckinButton({ participant, event }: CheckinButtonProps) {
   const allCheckins = useCheckinStore((s) => s.checkins);
@@ -56,7 +57,7 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
   // Mantém a mesma altura do botão para a linha não "dançar".
   if (participant.type === 'normal' && status === 'inside') {
     return (
-      <span className="inline-flex h-8 w-full items-center justify-center text-sm text-slate-400 md:w-auto">
+      <span className="inline-flex h-8 w-full items-center justify-center text-sm text-slate-400 dark:text-slate-500 md:w-auto">
         —
       </span>
     );
