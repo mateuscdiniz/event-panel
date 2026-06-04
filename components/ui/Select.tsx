@@ -110,7 +110,7 @@ export function Select({
         aria-label={ariaLabel}
         onClick={() => (open ? setOpen(false) : openMenu())}
         onKeyDown={handleKeyDown}
-        className="flex w-full items-center justify-between gap-2 rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-2.5 text-sm text-slate-700 transition-colors hover:border-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+        className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-2.5 text-sm text-slate-700 transition-colors hover:border-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
       >
         <span className={cn('truncate', !selected && 'text-slate-400')}>
           {selected ? selected.label : placeholder}
@@ -140,7 +140,7 @@ export function Select({
                 onClick={() => commit(index)}
                 onMouseEnter={() => setHighlight(index)}
                 className={cn(
-                  'flex w-full items-center justify-between gap-4 whitespace-nowrap rounded-md px-2.5 py-1.5 text-left text-sm transition-colors',
+                  'flex w-full cursor-pointer items-center justify-between gap-4 whitespace-nowrap rounded-md px-2.5 py-1.5 text-left text-sm transition-colors',
                   isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-700',
                   isSelected && 'font-medium'
                 )}

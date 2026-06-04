@@ -14,9 +14,9 @@ interface CheckinButtonProps {
 // Mobile (<768px): botão full-width nos cards | Desktop (md+): largura automática na tabela.
 // Altura fixa (h-8) para que a linha da tabela não mude de altura entre estados.
 const BASE =
-  'cursor-pointer inline-flex h-8 w-full items-center justify-center rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 md:w-auto';
+  'inline-flex h-8 w-full items-center justify-center rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 md:w-auto';
 const ENABLED =
-  'disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700 focus-visible:outline-blue-600';
+  'cursor-pointer bg-blue-600 text-white hover:bg-blue-700 focus-visible:outline-blue-600';
 const DISABLED = 'cursor-not-allowed bg-gray-100 text-gray-400';
 
 export function CheckinButton({ participant, event }: CheckinButtonProps) {
