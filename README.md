@@ -165,27 +165,6 @@ npm run test:ui   # modo interativo
 | `QueryClient` via `useState` | Instância por cliente, evitando cache compartilhado entre requests (App Router) |
 | Regras isoladas em `lib/checkin.ts` | Funções puras e testáveis, sem acoplamento com a UI |
 
-### Ajustes em relação ao SPECS
-
-- **Next.js 16 (não 14):** o projeto instalado usa Next 16.2.7 + React 19. As páginas que dependem de React Query/Zustand são Client Components; o restante segue os padrões atuais do App Router.
-- **`@vitejs/plugin-react`:** necessário pelo `vitest.config.ts`, mas ausente da lista de instalação do SPECS — adicionado como `devDependency`.
-- **Scripts `test` / `test:ui`:** adicionados ao `package.json` (estavam documentados no `CLAUDE.md`, mas não existiam).
-- **`entry_rate`:** a API entrega fração (`0.92`); o helper `formatPercent` normaliza para exibição em `%`.
-
----
-
-## 🔭 Melhorias Futuras
-
-- Integração com `json-server` local para CRUD real
-- Paginação na lista de participantes
-- Filtros avançados no dashboard (por período, tipo)
-- Exportação de relatório em CSV
-- Modo escuro
-- PWA / suporte offline
-- Autenticação (NextAuth)
-- Sidebar de navegação no desktop (prevista no SPECS, ainda não implementada)
-- SSR com prefetch + hydration do React Query (hoje o fetch é client-side)
-
 ---
 
 ## 🤖 Uso de IA no Desenvolvimento
