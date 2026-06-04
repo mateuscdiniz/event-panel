@@ -12,8 +12,9 @@ interface CheckinButtonProps {
 }
 
 // Mobile (<768px): botão full-width nos cards | Desktop (md+): largura automática na tabela.
+// Altura fixa (h-8) para que a linha da tabela não mude de altura entre estados.
 const BASE =
-  'inline-flex w-full items-center justify-center rounded-lg px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 md:w-auto';
+  'inline-flex h-8 w-full items-center justify-center rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 md:w-auto';
 const ENABLED =
   'bg-blue-600 text-white hover:bg-blue-700 focus-visible:outline-blue-600';
 const DISABLED = 'cursor-not-allowed bg-gray-100 text-gray-400';
@@ -52,8 +53,13 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
   }
 
   // Normal que está dentro não tem ação de saída.
+  // Mantém a mesma altura do botão para a linha não "dançar".
   if (participant.type === 'normal' && status === 'inside') {
-    return <span className="text-sm text-gray-400">—</span>;
+    return (
+      <span className="inline-flex h-8 w-full items-center justify-center text-sm text-slate-400 md:w-auto">
+        —
+      </span>
+    );
   }
 
   // result.success === true a partir daqui.

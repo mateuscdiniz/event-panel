@@ -1,6 +1,14 @@
 'use client';
 
-import { Users } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsUpDown,
+  ChevronUp,
+  Users,
+} from 'lucide-react';
 import type { EventDetail, Participant, ParticipantStatus } from '@/types';
 import { useCheckinStore } from '@/store/checkinStore';
 import { deriveStatus } from '@/lib/checkin';
@@ -12,31 +20,255 @@ interface ParticipantTableProps {
   event: EventDetail;
 }
 
+type SortKey = 'name' | 'type' | 'status';
+type SortDir = 'asc' | 'desc';
+type PageSize = 5 | 10 | 20;
+
+interface RankedParticipant {
+  participant: Participant;
+  status: ParticipantStatus;
+}
+
 const TYPE_LABELS = { vip: 'VIP', normal: 'Normal' } as const;
 const STATUS_LABELS: Record<ParticipantStatus, string> = {
   inside: 'Dentro',
   outside: 'Fora',
 };
+const PAGE_SIZES: PageSize[] = [5, 10, 20];
+const SORT_LABELS: Record<SortKey, string> = {
+  name: 'Nome',
+  type: 'Tipo',
+  status: 'Status',
+};
 
-// Hook: status atual do participante considerando check-ins locais (Zustand).
-function useLiveStatus(participant: Participant): ParticipantStatus {
-  const checkins = useCheckinStore((s) => s.checkins);
-  const local = checkins.filter((c) => c.participant_id === participant.id);
-  return deriveStatus(participant, local);
+const SELECT_CLASS =
+  'rounded-lg border border-slate-300 bg-white py-1.5 pl-2.5 pr-8 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30';
+
+function compareRows(a: RankedParticipant, b: RankedParticipant, key: SortKey): number {
+  if (key === 'type') return a.participant.type.localeCompare(b.participant.type);
+  if (key === 'status') return a.status.localeCompare(b.status);
+  return a.participant.name.localeCompare(b.participant.name, 'pt-BR');
 }
 
-function ParticipantRow({
-  participant,
-  event,
-}: {
-  participant: Participant;
-  event: EventDetail;
-}) {
-  const status = useLiveStatus(participant);
+export function ParticipantTable({ event }: ParticipantTableProps) {
+  const checkins = useCheckinStore((s) => s.checkins);
+  const [sortKey, setSortKey] = useState<SortKey>('name');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
+  const [pageSize, setPageSize] = useState<PageSize>(5);
+  const [page, setPage] = useState(0);
+
+  // Status atual de cada participante (considerando check-ins locais) + ordenação.
+  const rows = useMemo<RankedParticipant[]>(() => {
+    const list = event.participants ?? [];
+    const ranked = list.map((p) => ({
+      participant: p,
+      status: deriveStatus(
+        p,
+        checkins.filter((c) => c.participant_id === p.id)
+      ),
+    }));
+    const dir = sortDir === 'asc' ? 1 : -1;
+    return ranked.sort((a, b) => dir * compareRows(a, b, sortKey));
+  }, [event.participants, checkins, sortKey, sortDir]);
+
+  const total = rows.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(page, totalPages - 1);
+  const start = currentPage * pageSize;
+  const visible = rows.slice(start, start + pageSize);
+
+  function handleSort(key: SortKey) {
+    if (key === sortKey) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
+    setPage(0);
+  }
+
+  if (total === 0) {
+    return (
+      <EmptyState
+        icon={<Users className="h-6 w-6" />}
+        title="Nenhum participante"
+        description="Este evento não possui participantes cadastrados."
+      />
+    );
+  }
 
   return (
-    <tr className="transition-colors hover:bg-slate-50">
-      <td className="px-4 py-3 font-medium text-slate-900">{participant.name}</td>
+    <div className="flex flex-col gap-3">
+      {/* Mobile: controle de ordenação (no desktop usa-se o cabeçalho) */}
+      <div className="flex items-center gap-2 md:hidden">
+        <label className="text-xs font-medium text-slate-500">Ordenar:</label>
+        <select
+          value={sortKey}
+          onChange={(e) => handleSort(e.target.value as SortKey)}
+          aria-label="Ordenar participantes por"
+          className={SELECT_CLASS}
+        >
+          {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
+            <option key={k} value={k}>
+              {SORT_LABELS[k]}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={() => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
+          aria-label={sortDir === 'asc' ? 'Ordem crescente' : 'Ordem decrescente'}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50"
+        >
+          {sortDir === 'asc' ? (
+            <ChevronUp className="h-4 w-4" />
+          ) : (
+            <ChevronDown className="h-4 w-4" />
+          )}
+        </button>
+      </div>
+
+      {/* Desktop / tablet: tabela com cabeçalho ordenável */}
+      <div className="hidden overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm md:block">
+        <table className="w-full min-w-[640px] table-fixed divide-y divide-slate-200 text-sm">
+          {/* Larguras fixas por coluna → não "sambam" ao paginar */}
+          <colgroup>
+            <col />
+            <col className="w-28" />
+            <col className="w-32" />
+            <col className="w-48" />
+          </colgroup>
+          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <tr>
+              <SortableHeader columnKey="name" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
+                Nome
+              </SortableHeader>
+              <SortableHeader columnKey="type" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
+                Tipo
+              </SortableHeader>
+              <SortableHeader columnKey="status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
+                Status
+              </SortableHeader>
+              <th className="px-4 py-3 text-right">Ação</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {visible.map((row) => (
+              <ParticipantRow key={row.participant.id} row={row} event={event} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile: cards empilhados */}
+      <div className="flex flex-col gap-3 md:hidden">
+        {visible.map((row) => (
+          <ParticipantMobileCard key={row.participant.id} row={row} event={event} />
+        ))}
+      </div>
+
+      {/* Paginação (desktop e mobile) */}
+      <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
+        <div className="flex items-center gap-2 text-sm text-slate-500">
+          <span>Por página:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value) as PageSize);
+              setPage(0);
+            }}
+            aria-label="Itens por página"
+            className={SELECT_CLASS}
+          >
+            {PAGE_SIZES.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center gap-3 text-sm text-slate-500">
+          <span className="tabular-nums">
+            {start + 1}–{Math.min(start + pageSize, total)} de {total}
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={currentPage === 0}
+              aria-label="Página anterior"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <span className="px-1 tabular-nums text-slate-600">
+              {currentPage + 1} / {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={currentPage >= totalPages - 1}
+              aria-label="Próxima página"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface SortableHeaderProps {
+  columnKey: SortKey;
+  sortKey: SortKey;
+  sortDir: SortDir;
+  onSort: (key: SortKey) => void;
+  children: React.ReactNode;
+}
+
+function SortableHeader({
+  columnKey,
+  sortKey,
+  sortDir,
+  onSort,
+  children,
+}: SortableHeaderProps) {
+  const active = sortKey === columnKey;
+  return (
+    <th
+      className="px-4 py-3"
+      aria-sort={active ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
+      <button
+        type="button"
+        onClick={() => onSort(columnKey)}
+        className="inline-flex items-center gap-1 uppercase tracking-wide transition-colors hover:text-slate-700"
+      >
+        {children}
+        {active ? (
+          sortDir === 'asc' ? (
+            <ChevronUp className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronDown className="h-3.5 w-3.5" />
+          )
+        ) : (
+          <ChevronsUpDown className="h-3.5 w-3.5 opacity-40" />
+        )}
+      </button>
+    </th>
+  );
+}
+
+function ParticipantRow({ row, event }: { row: RankedParticipant; event: EventDetail }) {
+  const { participant, status } = row;
+  return (
+    <tr className="h-14 transition-colors hover:bg-slate-50">
+      <td className="truncate px-4 py-3 font-medium text-slate-900" title={participant.name}>
+        {participant.name}
+      </td>
       <td className="px-4 py-3">
         <Badge variant={participant.type}>{TYPE_LABELS[participant.type]}</Badge>
       </td>
@@ -51,14 +283,13 @@ function ParticipantRow({
 }
 
 function ParticipantMobileCard({
-  participant,
+  row,
   event,
 }: {
-  participant: Participant;
+  row: RankedParticipant;
   event: EventDetail;
 }) {
-  const status = useLiveStatus(participant);
-
+  const { participant, status } = row;
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-2">
@@ -70,50 +301,6 @@ function ParticipantMobileCard({
       </div>
       <CheckinButton participant={participant} event={event} />
     </div>
-  );
-}
-
-export function ParticipantTable({ event }: ParticipantTableProps) {
-  const participants = event.participants ?? [];
-
-  if (participants.length === 0) {
-    return (
-      <EmptyState
-        icon={<Users className="h-6 w-6" />}
-        title="Nenhum participante"
-        description="Este evento não possui participantes cadastrados."
-      />
-    );
-  }
-
-  return (
-    <>
-      {/* Desktop / tablet: tabela */}
-      <div className="hidden overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm md:block">
-        <table className="min-w-full divide-y divide-slate-200 text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3">Nome</th>
-              <th className="px-4 py-3">Tipo</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3 text-right">Ação</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {participants.map((p) => (
-              <ParticipantRow key={p.id} participant={p} event={event} />
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Mobile: cards empilhados */}
-      <div className="flex flex-col gap-3 md:hidden">
-        {participants.map((p) => (
-          <ParticipantMobileCard key={p.id} participant={p} event={event} />
-        ))}
-      </div>
-    </>
   );
 }
 
