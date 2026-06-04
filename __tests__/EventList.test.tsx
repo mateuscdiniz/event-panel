@@ -7,7 +7,7 @@ import type { Event } from '@/types';
 
 // Mockamos o hook de dados (React Query) para controlar os estados da tela.
 vi.mock('@/hooks/useEvents', () => ({ useEvents: vi.fn() }));
-// EventTable usa useRouter — stub simples para navegação.
+// Stub de navegação (usado pelos componentes de listagem).
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));

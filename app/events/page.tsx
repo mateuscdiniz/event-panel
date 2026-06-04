@@ -10,7 +10,6 @@ import {
   type SortOrder,
   type StatusFilter,
 } from '@/components/events/EventFilters';
-import { EventTable } from '@/components/events/EventTable';
 import { EventCard } from '@/components/events/EventCard';
 import { EventListSkeleton } from '@/components/events/EventListSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -82,18 +81,11 @@ export default function EventsPage() {
       )}
 
       {!isLoading && !isError && filtered.length > 0 && (
-        <>
-          {/* Desktop / tablet: tabela */}
-          <div className="hidden md:block">
-            <EventTable events={filtered} />
-          </div>
-          {/* Mobile: cards empilhados */}
-          <div className="flex flex-col gap-3 md:hidden">
-            {filtered.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        </>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
       )}
     </div>
   );

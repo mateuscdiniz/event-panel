@@ -107,15 +107,15 @@ export default function EventDashboardPage() {
         />
       </section>
 
-      {/* C) Gráfico de evolução */}
-      <section>
-        <CheckinChart checkins={chartCheckins} />
-      </section>
-
-      {/* D) Lista de participantes */}
+      {/* C) Lista de participantes */}
       <section className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold text-slate-900">Participantes</h2>
         <ParticipantTable event={event} />
+      </section>
+
+      {/* D) Gráfico de evolução */}
+      <section>
+        <CheckinChart checkins={chartCheckins} />
       </section>
     </div>
   );

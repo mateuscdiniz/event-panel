@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Calendar, MapPin, Users } from 'lucide-react';
+import { ArrowRight, Calendar, MapPin, Users } from 'lucide-react';
 import type { Event } from '@/types';
 import { Badge } from '@/components/ui/Badge';
 import { EVENT_STATUS_LABELS, formatDate } from '@/lib/utils';
@@ -14,7 +14,7 @@ export function EventCard({ event }: EventCardProps) {
   return (
     <Link
       href={`/events/${event.id}`}
-      className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-300 hover:shadow-md active:scale-[0.99]"
+      className="group flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:border-blue-300 hover:shadow-lg active:scale-[0.99]"
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-semibold text-slate-900">{event.name}</h3>
@@ -38,6 +38,11 @@ export function EventCard({ event }: EventCardProps) {
           </span>
         </div>
       </dl>
+
+      <div className="mt-auto flex items-center justify-end gap-1 border-t border-slate-100 pt-3 text-sm font-medium text-blue-600">
+        Ver detalhes
+        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+      </div>
     </Link>
   );
 }
