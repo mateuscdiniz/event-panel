@@ -1,6 +1,3 @@
-// Bandeiras em SVG (emoji de bandeira não renderiza no Windows).
-// Exemplo de uso: <Flag country="br" />
-
 interface FlagProps {
   country: 'br' | 'us';
   className?: string;
@@ -17,7 +14,6 @@ export function Flag({ country, className = 'h-3.5 w-5' }: FlagProps) {
     );
   }
 
-  // Estados Unidos (listras + cantão simplificados).
   return (
     <svg viewBox="0 0 28 20" className={className} aria-hidden role="img">
       <rect width="28" height="20" rx="2" fill="#fff" />

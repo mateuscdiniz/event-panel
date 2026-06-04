@@ -28,7 +28,6 @@ export default function EventDashboardPage() {
 
   const localCheckins = useCheckinStore((s) => s.checkins);
 
-  // Check-ins simulados deste evento (Zustand) — somados às métricas e ao gráfico.
   const localForEvent = useMemo(
     () => localCheckins.filter((c) => c.event_id === id),
     [localCheckins, id]
@@ -61,7 +60,6 @@ export default function EventDashboardPage() {
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6">
       <BackLink />
 
-      {/* A) Header do evento */}
       <header className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
@@ -79,7 +77,6 @@ export default function EventDashboardPage() {
         <p className="max-w-3xl text-sm text-slate-600 dark:text-slate-300">{event.description}</p>
       </header>
 
-      {/* B) Métricas (4 cards) — mobile: 1 col | tablet: 2 cols | desktop: 4 cols */}
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           label={t('metrics.expected')}
@@ -105,13 +102,11 @@ export default function EventDashboardPage() {
         />
       </section>
 
-      {/* C) Lista de participantes */}
       <section className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{t('dashboard.participants')}</h2>
         <ParticipantTable event={event} />
       </section>
 
-      {/* D) Gráfico de evolução */}
       <section>
         <CheckinChart checkins={chartCheckins} />
       </section>

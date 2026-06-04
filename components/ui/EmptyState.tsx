@@ -5,7 +5,7 @@ interface EmptyStateProps {
   title: string;
   description?: string;
   icon?: ReactNode;
-  action?: ReactNode; // opcional: botão/link contextual
+  action?: ReactNode;
   className?: string;
 }
 

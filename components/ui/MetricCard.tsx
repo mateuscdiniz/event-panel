@@ -5,7 +5,7 @@ interface MetricCardProps {
   label: string;
   value: ReactNode;
   icon?: ReactNode;
-  trend?: string; // opcional, ex: "+3 nas últimas 2h"
+  trend?: string;
   className?: string;
 }
 

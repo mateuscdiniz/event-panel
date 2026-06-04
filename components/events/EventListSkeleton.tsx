@@ -1,6 +1,3 @@
-// Exemplo de uso:
-//   {isLoading && <EventListSkeleton />}
-
 'use client';
 
 import { Skeleton } from '@/components/ui/Skeleton';

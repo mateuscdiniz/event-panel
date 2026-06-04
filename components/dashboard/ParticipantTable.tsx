@@ -48,7 +48,6 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
   const [pageSize, setPageSize] = useState<PageSize>(5);
   const [page, setPage] = useState(0);
 
-  // Status atual de cada participante (considerando check-ins locais) + ordenação.
   const rows = useMemo<RankedParticipant[]>(() => {
     const list = event.participants ?? [];
     const ranked = list.map((p) => ({
@@ -95,7 +94,6 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Mobile: controle de ordenação (no desktop usa-se o cabeçalho) */}
       <div className="flex items-center gap-2 md:hidden">
         <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{t('table.sortLabel')}</span>
         <Select
@@ -125,11 +123,9 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
         </button>
       </div>
 
-      {/* Desktop / tablet: tabela com cabeçalho ordenável + paginação no rodapé do card */}
       <div className="hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 md:block">
         <div className="overflow-x-auto rounded-t-xl">
           <table className="w-full min-w-[640px] table-fixed divide-y divide-slate-200 text-sm dark:divide-slate-800">
-            {/* Larguras fixas por coluna → não "sambam" ao paginar */}
             <colgroup>
               <col />
               <col className="w-28" />
@@ -171,7 +167,6 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
         </div>
       </div>
 
-      {/* Mobile: cards empilhados + paginação no rodapé */}
       <div className="flex flex-col gap-3 md:hidden">
         {visible.map((row) => (
           <ParticipantMobileCard key={row.participant.id} row={row} event={event} />

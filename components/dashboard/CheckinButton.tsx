@@ -12,8 +12,6 @@ interface CheckinButtonProps {
   event: EventDetail;
 }
 
-// Mobile (<768px): botão full-width nos cards | Desktop (md+): largura automática na tabela.
-// Altura fixa (h-8) para que a linha da tabela não mude de altura entre estados.
 const BASE =
   'inline-flex h-8 w-full items-center justify-center rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 md:w-auto';
 const ENABLED =
@@ -32,7 +30,6 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
   const status = deriveStatus(participant, localCheckins);
   const result = validateCheckin(participant, event, allCheckins);
 
-  // Evento encerrado/cancelado → bloqueia tudo (com tooltip).
   if (event.status === 'closed' || event.status === 'cancelled') {
     return (
       <button
@@ -46,7 +43,6 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
     );
   }
 
-  // Normal que já entrou e saiu não reentra.
   if (!result.success && result.error === 'already_checked_in') {
     return (
       <button type="button" disabled className={cn(BASE, DISABLED)}>
@@ -55,8 +51,6 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
     );
   }
 
-  // Normal que está dentro não tem ação de saída.
-  // Mantém a mesma altura do botão para a linha não "dançar".
   if (participant.type === 'normal' && status === 'inside') {
     return (
       <span className="inline-flex h-8 w-full items-center justify-center text-sm text-slate-400 dark:text-slate-500 md:w-auto">
@@ -65,7 +59,6 @@ export function CheckinButton({ participant, event }: CheckinButtonProps) {
     );
   }
 
-  // result.success === true a partir daqui.
   const action = result.success ? result.action : 'entry';
   const label = action === 'entry' ? t('checkin.do') : t('checkin.exit');
 

@@ -7,7 +7,7 @@ type Params = Record<string, string | number>;
 interface UseTranslation {
   t: (key: string, params?: Params) => string;
   locale: Locale;
-  dateLocale: string; // BCP47 para Intl
+  dateLocale: string;
 }
 
 export function useT(): UseTranslation {

@@ -13,9 +13,8 @@ export type CheckinResult =
 export function validateCheckin(
   participant: Participant,
   event: EventDetail,
-  localCheckins: Checkin[] // check-ins simulados do Zustand
+  localCheckins: Checkin[]
 ): CheckinResult {
-  // Regra 1: Evento encerrado bloqueia tudo
   if (event.status === 'closed' || event.status === 'cancelled') {
     return { success: false, error: 'event_closed' };
   }
@@ -30,7 +29,6 @@ export function validateCheckin(
 
   const currentStatus = deriveStatus(participant, myCheckins);
 
-  // Regra 2: Normal só pode fazer 1 check-in
   if (
     participant.type === 'normal' &&
     myAll.length > 0 &&
@@ -39,12 +37,10 @@ export function validateCheckin(
     return { success: false, error: 'already_checked_in' };
   }
 
-  // Regra 3: VIP pode entrar/sair livremente
   const action: CheckinAction = currentStatus === 'outside' ? 'entry' : 'exit';
   return { success: true, action };
 }
 
-// Deriva status atual considerando histórico local
 export function deriveStatus(
   participant: Participant,
   localCheckins: Checkin[]

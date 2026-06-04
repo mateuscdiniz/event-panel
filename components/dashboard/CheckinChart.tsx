@@ -20,7 +20,6 @@ interface CheckinChartProps {
   checkins: Checkin[];
 }
 
-// Agrupa check-ins de sucesso por minuto e acumula a contagem ao longo do tempo.
 function buildSeries(checkins: Checkin[], dateLocale: string) {
   const successful = checkins
     .filter((c) => c.success)
@@ -50,7 +49,6 @@ export function CheckinChart({ checkins }: CheckinChartProps) {
     );
   }
 
-  // Cores do gráfico adaptadas ao tema (Recharts usa props inline, não CSS).
   const grid = isDark ? '#1e293b' : '#f1f5f9';
   const axisTick = isDark ? '#94a3b8' : '#6b7280';
   const axisLine = isDark ? '#334155' : '#e5e7eb';

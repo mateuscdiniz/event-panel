@@ -1,6 +1,3 @@
-// Rodapé global da aplicação (renderizado no root layout).
-// Exemplo de uso: <Footer />
-
 'use client';
 
 import { CalendarCheck2 } from 'lucide-react';

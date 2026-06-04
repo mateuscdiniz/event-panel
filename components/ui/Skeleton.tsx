@@ -1,7 +1,3 @@
-// Exemplo de uso:
-//   <Skeleton className="h-4 w-32" />
-//   <Skeleton className="h-10 w-10 rounded-full" />
-
 import { cn } from '@/lib/utils';
 
 interface SkeletonProps {

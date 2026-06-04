@@ -9,7 +9,6 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LanguageSelect } from "@/components/ui/LanguageSelect";
 import { LocaleInitializer } from "@/components/ui/LocaleInitializer";
 
-// Aplica o tema salvo (ou preferência do SO) antes da hidratação — evita "flash".
 const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`;
 
 const inter = Inter({

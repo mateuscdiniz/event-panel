@@ -2,7 +2,6 @@ export type Locale = 'pt' | 'en';
 
 export const LOCALES: Locale[] = ['pt', 'en'];
 
-// Locale BCP47 para Intl (datas/números).
 export const DATE_LOCALES: Record<Locale, string> = {
   pt: 'pt-BR',
   en: 'en-US',
@@ -12,16 +11,13 @@ type Dict = Record<string, string>;
 type Params = Record<string, string | number>;
 
 const pt: Dict = {
-  // Comum
   'common.retry': 'Tentar novamente',
   'common.participants': 'participantes',
   'common.backToEvents': 'Voltar para eventos',
   'common.errorGeneric': 'Algo deu errado.',
 
-  // Rodapé
   'footer.tagline': 'Painel de gestão de eventos',
 
-  // Listagem de eventos
   'events.title': 'Eventos',
   'events.subtitle': 'Gerencie eventos, métricas e check-in de participantes.',
   'events.searchPlaceholder': 'Buscar por nome do evento...',
@@ -33,7 +29,6 @@ const pt: Dict = {
   'events.errorLoad': 'Não foi possível carregar os eventos.',
   'events.seeDetails': 'Ver detalhes',
 
-  // Filtros
   'filters.status': 'Status',
   'filters.statusAria': 'Filtrar por status',
   'filters.sort': 'Ordenar por data',
@@ -41,19 +36,16 @@ const pt: Dict = {
   'sort.recent': 'Mais recente',
   'sort.oldest': 'Mais antigo',
 
-  // Status do evento
   'status.all': 'Todos',
   'status.active': 'Ativo',
   'status.closed': 'Encerrado',
   'status.cancelled': 'Cancelado',
 
-  // Tipo / status do participante
   'type.vip': 'VIP',
   'type.normal': 'Normal',
   'pstatus.inside': 'Dentro',
   'pstatus.outside': 'Fora',
 
-  // Dashboard
   'dashboard.errorLoad': 'Não foi possível carregar o evento.',
   'dashboard.loadingAria': 'Carregando evento',
   'dashboard.participants': 'Participantes',
@@ -63,14 +55,12 @@ const pt: Dict = {
   'metrics.entryRate': 'Taxa de Entrada',
   'metrics.localTrend': '+{count} locais',
 
-  // Gráfico
   'chart.title': 'Evolução de check-ins',
   'chart.emptyTitle': 'Sem check-ins registrados',
   'chart.emptyDesc': 'Ainda não há entradas para exibir no gráfico.',
   'chart.time': 'Horário',
   'chart.cumulative': 'Check-ins acumulados',
 
-  // Tabela de participantes
   'table.name': 'Nome',
   'table.type': 'Tipo',
   'table.status': 'Status',
@@ -87,7 +77,6 @@ const pt: Dict = {
   'table.emptyTitle': 'Nenhum participante',
   'table.emptyDesc': 'Este evento não possui participantes cadastrados.',
 
-  // Check-in (botão + toasts)
   'checkin.blocked': 'Check-in bloqueado',
   'checkin.blockedTitle': 'Evento encerrado — check-ins desabilitados',
   'checkin.already': 'Já fez check-in',
@@ -99,23 +88,19 @@ const pt: Dict = {
   'toast.already': '{name} já realizou o check-in',
   'toast.closed': 'Evento encerrado — check-ins desabilitados',
 
-  // Idioma
   'lang.pt': 'Português',
   'lang.en': 'Inglês',
   'lang.aria': 'Selecionar idioma',
 };
 
 const en: Dict = {
-  // Common
   'common.retry': 'Try again',
   'common.participants': 'attendees',
   'common.backToEvents': 'Back to events',
   'common.errorGeneric': 'Something went wrong.',
 
-  // Footer
   'footer.tagline': 'Event management panel',
 
-  // Events list
   'events.title': 'Events',
   'events.subtitle': 'Manage events, metrics and attendee check-in.',
   'events.searchPlaceholder': 'Search by event name...',
@@ -127,7 +112,6 @@ const en: Dict = {
   'events.errorLoad': 'Could not load events.',
   'events.seeDetails': 'See details',
 
-  // Filters
   'filters.status': 'Status',
   'filters.statusAria': 'Filter by status',
   'filters.sort': 'Sort by date',
@@ -135,19 +119,16 @@ const en: Dict = {
   'sort.recent': 'Most recent',
   'sort.oldest': 'Oldest',
 
-  // Event status
   'status.all': 'All',
   'status.active': 'Active',
   'status.closed': 'Closed',
   'status.cancelled': 'Cancelled',
 
-  // Participant type / status
   'type.vip': 'VIP',
   'type.normal': 'Normal',
   'pstatus.inside': 'Inside',
   'pstatus.outside': 'Outside',
 
-  // Dashboard
   'dashboard.errorLoad': 'Could not load the event.',
   'dashboard.loadingAria': 'Loading event',
   'dashboard.participants': 'Attendees',
@@ -157,14 +138,12 @@ const en: Dict = {
   'metrics.entryRate': 'Entry Rate',
   'metrics.localTrend': '+{count} local',
 
-  // Chart
   'chart.title': 'Check-in evolution',
   'chart.emptyTitle': 'No check-ins recorded',
   'chart.emptyDesc': 'There are no entries to show in the chart yet.',
   'chart.time': 'Time',
   'chart.cumulative': 'Cumulative check-ins',
 
-  // Participants table
   'table.name': 'Name',
   'table.type': 'Type',
   'table.status': 'Status',
@@ -181,7 +160,6 @@ const en: Dict = {
   'table.emptyTitle': 'No attendees',
   'table.emptyDesc': 'This event has no registered attendees.',
 
-  // Check-in (button + toasts)
   'checkin.blocked': 'Check-in disabled',
   'checkin.blockedTitle': 'Event closed — check-ins disabled',
   'checkin.already': 'Already checked in',
@@ -193,7 +171,6 @@ const en: Dict = {
   'toast.already': '{name} has already checked in',
   'toast.closed': 'Event closed — check-ins disabled',
 
-  // Language
   'lang.pt': 'Portuguese',
   'lang.en': 'English',
   'lang.aria': 'Select language',

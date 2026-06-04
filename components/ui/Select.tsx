@@ -1,12 +1,3 @@
-// Select customizado (substitui o <select> nativo para estilizar as options).
-// Exemplo de uso:
-//   <Select
-//     aria-label="Filtrar por status"
-//     value={status}
-//     onChange={(v) => setStatus(v as StatusFilter)}
-//     options={[{ value: 'all', label: 'Todos' }, { value: 'active', label: 'Ativo' }]}
-//   />
-
 'use client';
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
@@ -25,8 +16,8 @@ interface SelectProps {
   options: SelectOption[];
   'aria-label'?: string;
   placeholder?: string;
-  className?: string; // controla a largura do trigger
-  placement?: 'bottom' | 'top'; // direção de abertura do dropdown
+  className?: string;
+  placement?: 'bottom' | 'top';
 }
 
 export function Select({
@@ -44,7 +35,6 @@ export function Select({
 
   const selected = options.find((o) => o.value === value);
 
-  // Fecha ao clicar fora.
   useEffect(() => {
     if (!open) return;
     function onDocMouseDown(e: MouseEvent) {
@@ -54,7 +44,6 @@ export function Select({
     return () => document.removeEventListener('mousedown', onDocMouseDown);
   }, [open]);
 
-  // Abre o menu destacando a opção atualmente selecionada.
   function openMenu() {
     const idx = options.findIndex((o) => o.value === value);
     setHighlight(idx >= 0 ? idx : 0);

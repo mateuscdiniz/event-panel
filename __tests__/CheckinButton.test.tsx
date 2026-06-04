@@ -6,7 +6,6 @@ import { CheckinButton } from '@/components/dashboard/CheckinButton';
 import { useCheckinStore } from '@/store/checkinStore';
 import type { Checkin, EventDetail, Participant } from '@/types';
 
-// Sonner é um efeito colateral — mockamos para inspecionar os toasts.
 vi.mock('sonner', () => ({
   toast: {
     success: vi.fn(),
@@ -60,7 +59,6 @@ function makeCheckin(overrides: Partial<Checkin> = {}): Checkin {
 
 describe('CheckinButton', () => {
   beforeEach(() => {
-    // Store Zustand é um singleton de módulo — reseta entre os testes.
     useCheckinStore.setState({ checkins: [] });
     vi.clearAllMocks();
   });
@@ -74,16 +72,13 @@ describe('CheckinButton', () => {
 
     await user.click(screen.getByRole('button', { name: 'Fazer Check-in' }));
 
-    // Estado atualizado no store
     expect(useCheckinStore.getState().checkins).toHaveLength(1);
     expect(useCheckinStore.getState().checkins[0]).toMatchObject({
       participant_id: 'V1',
       action: 'entry',
       success: true,
     });
-    // Toast de sucesso
     expect(toast.success).toHaveBeenCalledWith('Entrada registrada para Ana Pereira');
-    // Botão reflete o novo estado (dentro → pode registrar saída)
     expect(
       screen.getByRole('button', { name: 'Registrar Saída' })
     ).toBeInTheDocument();
@@ -99,7 +94,6 @@ describe('CheckinButton', () => {
     await user.click(screen.getByRole('button', { name: 'Fazer Check-in' }));
 
     expect(toast.success).toHaveBeenCalledWith('Check-in realizado para Ana Pereira');
-    // Normal não tem ação de saída → não há mais botão de check-in.
     expect(
       screen.queryByRole('button', { name: 'Fazer Check-in' })
     ).not.toBeInTheDocument();
@@ -129,7 +123,6 @@ describe('CheckinButton', () => {
     expect(blocked).toBeDisabled();
     expect(blocked).toHaveAttribute('title', expect.stringContaining('encerrado'));
 
-    // Clicar num botão desabilitado não dispara check-in nem toast de sucesso.
     await user.click(blocked);
     expect(useCheckinStore.getState().checkins).toHaveLength(0);
     expect(toast.success).not.toHaveBeenCalled();

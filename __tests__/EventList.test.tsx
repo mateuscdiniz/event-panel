@@ -5,16 +5,13 @@ import EventsPage from '@/app/events/page';
 import { useEvents } from '@/hooks/useEvents';
 import type { Event } from '@/types';
 
-// Mockamos o hook de dados (React Query) para controlar os estados da tela.
 vi.mock('@/hooks/useEvents', () => ({ useEvents: vi.fn() }));
-// Stub de navegação (usado pelos componentes de listagem).
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
 const mockedUseEvents = vi.mocked(useEvents);
 
-// Helper para montar o retorno do hook sem `any` nem `@ts-ignore`.
 function mockEventsResult(
   partial: Partial<ReturnType<typeof useEvents>>
 ): void {
@@ -96,11 +93,9 @@ describe('Listagem de Eventos', () => {
 
     render(<EventsPage />);
 
-    // Ambos visíveis inicialmente (tabela + cards = pode aparecer mais de uma vez).
     expect(screen.getAllByText('Tech Summit').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Design Week').length).toBeGreaterThan(0);
 
-    // Select customizado: abre o dropdown e escolhe a opção "Ativo".
     await user.click(screen.getByRole('button', { name: 'Filtrar por status' }));
     await user.click(screen.getByRole('option', { name: 'Ativo' }));
 
@@ -122,7 +117,6 @@ describe('Listagem de Eventos', () => {
 
     await user.type(screen.getByLabelText('Buscar eventos'), 'Design');
 
-    // Após o debounce (300ms), apenas o evento correspondente permanece.
     await waitFor(
       () => expect(screen.queryAllByText('Tech Summit')).toHaveLength(0),
       { timeout: 1500 }

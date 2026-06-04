@@ -12,7 +12,7 @@ const SIZE_STYLES: Record<SpinnerSize, string> = {
 interface SpinnerProps {
   size?: SpinnerSize;
   className?: string;
-  label?: string; // texto acessível, default "Carregando"
+  label?: string;
 }
 
 export function Spinner({ size = 'md', className, label = 'Carregando' }: SpinnerProps) {
