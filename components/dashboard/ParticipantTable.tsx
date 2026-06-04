@@ -14,6 +14,7 @@ import { useCheckinStore } from '@/store/checkinStore';
 import { deriveStatus } from '@/lib/checkin';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { Select } from '@/components/ui/Select';
 import { CheckinButton } from './CheckinButton';
 
 interface ParticipantTableProps {
@@ -40,9 +41,6 @@ const SORT_LABELS: Record<SortKey, string> = {
   type: 'Tipo',
   status: 'Status',
 };
-
-const SELECT_CLASS =
-  'rounded-lg border border-slate-300 bg-white py-1.5 pl-2.5 pr-8 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30';
 
 function compareRows(a: RankedParticipant, b: RankedParticipant, key: SortKey): number {
   if (key === 'type') return a.participant.type.localeCompare(b.participant.type);
@@ -101,19 +99,20 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
     <div className="flex flex-col gap-3">
       {/* Mobile: controle de ordenação (no desktop usa-se o cabeçalho) */}
       <div className="flex items-center gap-2 md:hidden">
-        <label className="text-xs font-medium text-slate-500">Ordenar:</label>
-        <select
-          value={sortKey}
-          onChange={(e) => handleSort(e.target.value as SortKey)}
+        <span className="text-xs font-medium text-slate-500">Ordenar:</span>
+        <Select
           aria-label="Ordenar participantes por"
-          className={SELECT_CLASS}
-        >
-          {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
-            <option key={k} value={k}>
-              {SORT_LABELS[k]}
-            </option>
-          ))}
-        </select>
+          value={sortKey}
+          onChange={(v) => {
+            setSortKey(v as SortKey);
+            setPage(0);
+          }}
+          options={(Object.keys(SORT_LABELS) as SortKey[]).map((k) => ({
+            value: k,
+            label: SORT_LABELS[k],
+          }))}
+          className="w-36"
+        />
         <button
           type="button"
           onClick={() => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
@@ -171,21 +170,19 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
       <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
         <div className="flex items-center gap-2 text-sm text-slate-500">
           <span>Por página:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => {
-              setPageSize(Number(e.target.value) as PageSize);
+          <Select
+            aria-label="Itens por página"
+            value={String(pageSize)}
+            onChange={(v) => {
+              setPageSize(Number(v) as PageSize);
               setPage(0);
             }}
-            aria-label="Itens por página"
-            className={SELECT_CLASS}
-          >
-            {PAGE_SIZES.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
+            options={PAGE_SIZES.map((size) => ({
+              value: String(size),
+              label: String(size),
+            }))}
+            className="w-20"
+          />
         </div>
 
         <div className="flex items-center gap-3 text-sm text-slate-500">

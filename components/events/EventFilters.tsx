@@ -1,6 +1,7 @@
 'use client';
 
 import type { EventStatus } from '@/types';
+import { Select } from '@/components/ui/Select';
 
 export type StatusFilter = 'all' | EventStatus;
 export type SortOrder = 'recent' | 'oldest';
@@ -17,9 +18,6 @@ const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
   { value: 'oldest', label: 'Mais antigo' },
 ];
 
-const SELECT_CLASS =
-  'w-full rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-8 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 sm:w-auto';
-
 interface EventFiltersProps {
   status: StatusFilter;
   onStatusChange: (status: StatusFilter) => void;
@@ -35,37 +33,27 @@ export function EventFilters({
 }: EventFiltersProps) {
   return (
     <div className="flex gap-3">
-      <label className="flex flex-1 flex-col gap-1 text-xs font-medium text-gray-500 sm:flex-initial">
-        Status
-        <select
-          value={status}
-          onChange={(e) => onStatusChange(e.target.value as StatusFilter)}
+      <div className="flex flex-1 flex-col gap-1 sm:flex-initial">
+        <span className="text-xs font-medium text-slate-500">Status</span>
+        <Select
           aria-label="Filtrar por status"
-          className={SELECT_CLASS}
-        >
-          {STATUS_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-      </label>
+          value={status}
+          onChange={(v) => onStatusChange(v as StatusFilter)}
+          options={STATUS_OPTIONS}
+          className="w-full sm:w-40"
+        />
+      </div>
 
-      <label className="flex flex-1 flex-col gap-1 text-xs font-medium text-gray-500 sm:flex-initial">
-        Ordenar por data
-        <select
-          value={sort}
-          onChange={(e) => onSortChange(e.target.value as SortOrder)}
+      <div className="flex flex-1 flex-col gap-1 sm:flex-initial">
+        <span className="text-xs font-medium text-slate-500">Ordenar por data</span>
+        <Select
           aria-label="Ordenar por data"
-          className={SELECT_CLASS}
-        >
-          {SORT_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-      </label>
+          value={sort}
+          onChange={(v) => onSortChange(v as SortOrder)}
+          options={SORT_OPTIONS}
+          className="w-full sm:w-44"
+        />
+      </div>
     </div>
   );
 }

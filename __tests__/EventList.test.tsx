@@ -100,10 +100,9 @@ describe('Listagem de Eventos', () => {
     expect(screen.getAllByText('Tech Summit').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Design Week').length).toBeGreaterThan(0);
 
-    await user.selectOptions(
-      screen.getByLabelText('Filtrar por status'),
-      'active'
-    );
+    // Select customizado: abre o dropdown e escolhe a opção "Ativo".
+    await user.click(screen.getByRole('button', { name: 'Filtrar por status' }));
+    await user.click(screen.getByRole('option', { name: 'Ativo' }));
 
     expect(screen.getAllByText('Tech Summit').length).toBeGreaterThan(0);
     expect(screen.queryAllByText('Design Week')).toHaveLength(0);
