@@ -216,8 +216,8 @@ function PaginationControls({
 }: PaginationControlsProps) {
   const { t } = useT();
   return (
-    <div className="flex flex-col items-center justify-between gap-3 text-sm text-slate-500 dark:text-slate-400 sm:flex-row">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-3 text-sm text-slate-500 dark:text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start">
         <span>{t('table.perPage')}</span>
         <Select
           aria-label={t('table.perPageAria')}
@@ -231,7 +231,7 @@ function PaginationControls({
         />
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:justify-end">
         <span className="tabular-nums">
           {t('table.range', {
             start: start + 1,
