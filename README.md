@@ -1,5 +1,7 @@
 # EventPanel — Painel de Gestão de Eventos
 
+### 🔗 **[Acesse a demo ao vivo →](https://event-panel-kk7n3xb0k-mateuscdinizs-projects.vercel.app/)**
+
 Painel para gestão de eventos com **listagem**, **dashboard de métricas** e **controle de check-in** de participantes. Consome uma API somente-leitura e simula check-ins no cliente com regras de negócio próprias (entrada/saída de VIPs, check-in único para participantes normais, bloqueio de eventos encerrados).
 
 > A API de dados é servida via GitHub Pages (read-only): `https://ThiagoLifters.github.io/api_test`
