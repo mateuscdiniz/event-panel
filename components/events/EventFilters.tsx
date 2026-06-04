@@ -18,7 +18,7 @@ const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
 ];
 
 const SELECT_CLASS =
-  'rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-8 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30';
+  'w-full rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-8 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 sm:w-auto';
 
 interface EventFiltersProps {
   status: StatusFilter;
@@ -34,8 +34,8 @@ export function EventFilters({
   onSortChange,
 }: EventFiltersProps) {
   return (
-    <div className="flex flex-wrap gap-3">
-      <label className="flex flex-col gap-1 text-xs font-medium text-gray-500">
+    <div className="flex gap-3">
+      <label className="flex flex-1 flex-col gap-1 text-xs font-medium text-gray-500 sm:flex-initial">
         Status
         <select
           value={status}
@@ -51,7 +51,7 @@ export function EventFilters({
         </select>
       </label>
 
-      <label className="flex flex-col gap-1 text-xs font-medium text-gray-500">
+      <label className="flex flex-1 flex-col gap-1 text-xs font-medium text-gray-500 sm:flex-initial">
         Ordenar por data
         <select
           value={sort}
