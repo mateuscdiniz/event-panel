@@ -165,6 +165,8 @@ npm run test:ui   # modo interativo
 | `QueryClient` via `useState` | Instância por cliente, evitando cache compartilhado entre requests (App Router) |
 | Regras isoladas em `lib/checkin.ts` | Funções puras e testáveis, sem acoplamento com a UI |
 
+> Avaliamos SSR com prefetch + hydration do React Query, mas não compensa aqui (painel sem SEO, dados já em client-side com skeletons) — mantivemos o fetch no cliente.
+
 ---
 
 ## 🤖 Uso de IA no Desenvolvimento
