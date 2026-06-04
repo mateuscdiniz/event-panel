@@ -85,6 +85,11 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
     setPage(0);
   }
 
+  function handlePageSizeChange(size: PageSize) {
+    setPageSize(size);
+    setPage(0);
+  }
+
   if (total === 0) {
     return (
       <EmptyState
@@ -127,91 +132,137 @@ export function ParticipantTable({ event }: ParticipantTableProps) {
         </button>
       </div>
 
-      {/* Desktop / tablet: tabela com cabeçalho ordenável */}
-      <div className="hidden overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm md:block">
-        <table className="w-full min-w-[640px] table-fixed divide-y divide-slate-200 text-sm">
-          {/* Larguras fixas por coluna → não "sambam" ao paginar */}
-          <colgroup>
-            <col />
-            <col className="w-28" />
-            <col className="w-32" />
-            <col className="w-48" />
-          </colgroup>
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <tr>
-              <SortableHeader columnKey="name" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
-                Nome
-              </SortableHeader>
-              <SortableHeader columnKey="type" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
-                Tipo
-              </SortableHeader>
-              <SortableHeader columnKey="status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
-                Status
-              </SortableHeader>
-              <th className="px-4 py-3 text-right">Ação</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {visible.map((row) => (
-              <ParticipantRow key={row.participant.id} row={row} event={event} />
-            ))}
-          </tbody>
-        </table>
+      {/* Desktop / tablet: tabela com cabeçalho ordenável + paginação no rodapé do card */}
+      <div className="hidden rounded-xl border border-slate-200 bg-white shadow-sm md:block">
+        <div className="overflow-x-auto rounded-t-xl">
+          <table className="w-full min-w-[640px] table-fixed divide-y divide-slate-200 text-sm">
+            {/* Larguras fixas por coluna → não "sambam" ao paginar */}
+            <colgroup>
+              <col />
+              <col className="w-28" />
+              <col className="w-32" />
+              <col className="w-48" />
+            </colgroup>
+            <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <tr>
+                <SortableHeader columnKey="name" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
+                  Nome
+                </SortableHeader>
+                <SortableHeader columnKey="type" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
+                  Tipo
+                </SortableHeader>
+                <SortableHeader columnKey="status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
+                  Status
+                </SortableHeader>
+                <th className="px-4 py-3 text-right">Ação</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {visible.map((row) => (
+                <ParticipantRow key={row.participant.id} row={row} event={event} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="border-t border-slate-200 px-4 py-3">
+          <PaginationControls
+            pageSize={pageSize}
+            onPageSizeChange={handlePageSizeChange}
+            start={start}
+            total={total}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPrev={() => setPage((p) => Math.max(0, p - 1))}
+            onNext={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+          />
+        </div>
       </div>
 
-      {/* Mobile: cards empilhados */}
+      {/* Mobile: cards empilhados + paginação no rodapé */}
       <div className="flex flex-col gap-3 md:hidden">
         {visible.map((row) => (
           <ParticipantMobileCard key={row.participant.id} row={row} event={event} />
         ))}
-      </div>
-
-      {/* Paginação (desktop e mobile) */}
-      <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-        <div className="flex items-center gap-2 text-sm text-slate-500">
-          <span>Por página:</span>
-          <Select
-            aria-label="Itens por página"
-            value={String(pageSize)}
-            onChange={(v) => {
-              setPageSize(Number(v) as PageSize);
-              setPage(0);
-            }}
-            options={PAGE_SIZES.map((size) => ({
-              value: String(size),
-              label: String(size),
-            }))}
-            className="w-20"
+        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+          <PaginationControls
+            pageSize={pageSize}
+            onPageSizeChange={handlePageSizeChange}
+            start={start}
+            total={total}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPrev={() => setPage((p) => Math.max(0, p - 1))}
+            onNext={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
           />
         </div>
+      </div>
+    </div>
+  );
+}
 
-        <div className="flex items-center gap-3 text-sm text-slate-500">
-          <span className="tabular-nums">
-            {start + 1}–{Math.min(start + pageSize, total)} de {total}
+interface PaginationControlsProps {
+  pageSize: PageSize;
+  onPageSizeChange: (size: PageSize) => void;
+  start: number;
+  total: number;
+  currentPage: number;
+  totalPages: number;
+  onPrev: () => void;
+  onNext: () => void;
+}
+
+function PaginationControls({
+  pageSize,
+  onPageSizeChange,
+  start,
+  total,
+  currentPage,
+  totalPages,
+  onPrev,
+  onNext,
+}: PaginationControlsProps) {
+  return (
+    <div className="flex flex-col items-center justify-between gap-3 text-sm text-slate-500 sm:flex-row">
+      <div className="flex items-center gap-2">
+        <span>Por página:</span>
+        <Select
+          aria-label="Itens por página"
+          value={String(pageSize)}
+          onChange={(v) => onPageSizeChange(Number(v) as PageSize)}
+          options={PAGE_SIZES.map((size) => ({
+            value: String(size),
+            label: String(size),
+          }))}
+          className="w-20"
+        />
+      </div>
+
+      <div className="flex items-center gap-3">
+        <span className="tabular-nums">
+          {start + 1}–{Math.min(start + pageSize, total)} de {total}
+        </span>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={onPrev}
+            disabled={currentPage === 0}
+            aria-label="Página anterior"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <span className="px-1 tabular-nums text-slate-600">
+            {currentPage + 1} / {totalPages}
           </span>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              disabled={currentPage === 0}
-              aria-label="Página anterior"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="px-1 tabular-nums text-slate-600">
-              {currentPage + 1} / {totalPages}
-            </span>
-            <button
-              type="button"
-              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-              disabled={currentPage >= totalPages - 1}
-              aria-label="Próxima página"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={currentPage >= totalPages - 1}
+            aria-label="Próxima página"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </div>

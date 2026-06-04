@@ -25,6 +25,7 @@ interface SelectProps {
   'aria-label'?: string;
   placeholder?: string;
   className?: string; // controla a largura do trigger
+  placement?: 'bottom' | 'top'; // direção de abertura do dropdown
 }
 
 export function Select({
@@ -33,6 +34,7 @@ export function Select({
   options,
   placeholder = 'Selecione',
   className,
+  placement = 'bottom',
   'aria-label': ariaLabel,
 }: SelectProps) {
   const [open, setOpen] = useState(false);
@@ -126,7 +128,10 @@ export function Select({
       {open && (
         <div
           role="listbox"
-          className="absolute left-0 z-30 mt-1 max-h-60 min-w-full overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg ring-1 ring-black/5"
+          className={cn(
+            'absolute left-0 z-30 max-h-60 min-w-full overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg ring-1 ring-black/5',
+            placement === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'
+          )}
         >
           {options.map((opt, index) => {
             const isSelected = opt.value === value;
